@@ -42,6 +42,7 @@ android {
 }
 
 dependencies {
+    add('api', libs.kotlin, {})
 //    add('annotationProcessor', libs.arouterCompiler, {})
     add('annotationProcessor', libs.butterknifeProcessor, {})
     add('annotationProcessor', lifecycle.compiler, {})
