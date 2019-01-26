@@ -1,0 +1,43 @@
+import groovy.json.JsonSlurper
+
+task component {
+    String sign = "// generate by component.gradle"
+    File pkgJsonFile = new File("package.json")
+    def pkgConfig = new JsonSlurper().parseText(pkgJsonFile.text)
+
+    // 配置 setting.gradle
+    File settingGradleFile = touchFile("settings.gradle")
+    if (!settingGradleFile.text.contains(sign)) {
+        settingGradleFile.append("${sign}\napply from: '.component_setting.gradle'")
+    }
+
+    // config
+    File configFile = touchFile(".component_config.gradle")
+    // deps
+    File depsFile = touchFile(".component_deps.gradle")
+    String depsContent = "\n"
+    // setting
+    File settingFile = touchFile(".component_setting.gradle")
+    String settingContent = ""
+    for (component in pkgConfig.components) {
+        if (component.compile && !isRemote(component.path)) {
+            settingContent += "include(':${component.path}')\n"
+            depsContent += "  runtimeOnly project(':${component.path}')\n"
+        }
+    }
+    settingFile.write(settingContent, "utf-8")
+    configFile.write("""ext.component = [ entry: '${pkgConfig.entry}' ]""", "utf-8")
+    depsFile.write("""dependencies {${depsContent}}""", "utf-8")
+}
+
+static boolean isRemote(String path) {
+    return path.contains(":")
+}
+
+static File touchFile(String name) {
+    File file = new File(name)
+    if (!file.exists()) {
+        file.createNewFile()
+    }
+    return file
+}

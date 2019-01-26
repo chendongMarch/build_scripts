@@ -1,11 +1,12 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply from: '../scripts/utils.gradle'
+//apply plugin: 'kotlin-android'
+//apply plugin: 'kotlin-android-extensions'
+apply from: '../scripts/_utils.gradle'
 
 android {
     compileSdkVersion versions.compileSdkVersion
     defaultConfig {
+        applicationId params.applicationId
         minSdkVersion versions.minSdkVersion
         targetSdkVersion versions.targetSdkVersion
         versionCode gitVersionCode()
@@ -17,12 +18,19 @@ android {
                 arguments = [AROUTER_MODULE_NAME: project.getName(), AROUTER_GENERATE_DOC: "enable"]
             }
         }
+        if (component) {
+            buildConfigField "String", "ENTRY", "\"${component.entry}\""
+        } else {
+            buildConfigField "String", "ENTRY", "\"\""
+        }
     }
+
     // data binding
     dataBinding {
         enabled true
     }
 
+    // java8 support
     android {
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_8
@@ -30,6 +38,18 @@ android {
         }
     }
 
+    // buildTypes
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+
+        }
+    }
+
+    // source
     sourceSets {
         main {
             res.srcDirs = ['src/main/res']
@@ -37,9 +57,15 @@ android {
         }
     }
 
+    // lint
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
+    }
+
+    // heap
+    dexOptions {
+        javaMaxHeapSize "4g"
     }
 }
 
@@ -53,6 +79,7 @@ android.applicationVariants.all { variant ->
     }
 }
 
+// 转移 apk
 def copyApk() {
     def dir = new File(getProjectDir().getPath() + "/build/outputs/apk/")
     def files = dir.listFiles()
@@ -77,8 +104,13 @@ tasks.whenTaskAdded { task ->
 
 // add dependencies for app
 dependencies {
-    add('api', libs.kotlin, {})
-    add('annotationProcessor', libs.butterknifeProcessor, {})
-    add('annotationProcessor', libs.arouterCompiler, {})
-    add('annotationProcessor', lifecycle.compiler, {})
+//    add('api', deps.kotlin, {})
+    add('annotationProcessor', deps.butterknifeProcessor, {})
+    add('annotationProcessor', deps.arouterCompiler, {})
+    add('annotationProcessor', deps.lifecycle_compiler, {})
+}
+
+if (new File("../component_deps.gradle").exists()) {
+    println("chendong  apply from: '../component_deps.gradle'")
+    apply from: '../component_deps.gradle'
 }

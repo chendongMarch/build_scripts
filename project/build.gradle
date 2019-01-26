@@ -1,5 +1,7 @@
+apply from: "scripts/project.gradle"
+
+// 以下可以根据需要配置
 buildscript {
-    apply from: "./scripts/dependence.gradle"
     repositories {
         google()
         jcenter()

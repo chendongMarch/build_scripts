@@ -1,0 +1,10 @@
+// 组件配置脚本
+if (new File(".component_config.gradle").exists()) {
+    apply from: ".component_config.gradle"
+}
+
+// 依赖组件化脚本
+apply from: "scripts/_component.gradle"
+
+// 依赖配置化脚本
+apply from: "scripts/_deps.gradle"
