@@ -110,7 +110,6 @@ dependencies {
     add('annotationProcessor', deps.lifecycle_compiler, {})
 }
 
-if (new File("../component_deps.gradle").exists()) {
-    println("chendong  apply from: '../component_deps.gradle'")
-    apply from: '../component_deps.gradle'
+if (new File(".component_deps.gradle").exists()) {
+    apply from: '../.component_deps.gradle'
 }
