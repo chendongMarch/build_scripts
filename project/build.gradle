@@ -1,6 +1,6 @@
 apply from: "scripts/project.gradle"
 
-// 以下可以根据需要配置
+// 以下和正常一样根据需要编写
 buildscript {
     repositories {
         google()

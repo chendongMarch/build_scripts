@@ -1,22 +1,40 @@
 import groovy.json.JsonSlurper
 
+// 组件化切换
+
 task component {
-    String sign = "// generate by component.gradle"
-    File pkgJsonFile = new File("package.json")
+    String sign = "// generate by _component.gradle, do not modify!\n"
+    File pkgJsonFile = new File(".component.json")
+    if (!pkgJsonFile.exists()) {
+        pkgJsonFile.createNewFile()
+        pkgJsonFile.write("""
+{
+  "entry": "main",
+  "components": [
+    {
+      "name": "main",
+      "compile": true,
+      "path": "component_main"
+    }
+  ]
+}""", "utf-8")
+        throw new RuntimeException("please update .component.json first")
+    }
     def pkgConfig = new JsonSlurper().parseText(pkgJsonFile.text)
 
     // 配置 setting.gradle
     File settingGradleFile = touchFile("settings.gradle")
     if (!settingGradleFile.text.contains(sign)) {
-        settingGradleFile.append("${sign}\napply from: '.component_setting.gradle'")
+        settingGradleFile.append("${sign}apply from: '.component_setting.gradle'")
     }
-
-    // config
+    // 打印消息
+    String logContent = ""
+    // 组件化配置文件，配置组件入口等
     File configFile = touchFile(".component_config.gradle")
-    // deps
+    // 组件化依赖文件，动态组件依赖
     File depsFile = touchFile(".component_deps.gradle")
     String depsContent = "\n"
-    // setting
+    // 组件化 settings 文件，动态添加编译
     File settingFile = touchFile(".component_setting.gradle")
     String settingContent = ""
     for (component in pkgConfig.components) {
@@ -24,10 +42,16 @@ task component {
             settingContent += "include(':${component.path}')\n"
             depsContent += "  runtimeOnly project(':${component.path}')\n"
         }
+        logContent += "组件 => ${component.name} | ${component.compile ? '' : '不'}参与编译 | 路径 => ${component.path}\n"
     }
-    settingFile.write(settingContent, "utf-8")
-    configFile.write("""ext.component = [ entry: '${pkgConfig.entry}' ]""", "utf-8")
-    depsFile.write("""dependencies {${depsContent}}""", "utf-8")
+    println("""
+配置文件详情如下：
+入口组件：${pkgConfig.entry}
+${logContent}
+""")
+    settingFile.write("${sign}${settingContent}", "utf-8")
+    configFile.write("""${sign}ext.component = [ entry: '${pkgConfig.entry}' ]""", "utf-8")
+    depsFile.write("""${sign}dependencies {${depsContent}}""", "utf-8")
 }
 
 static boolean isRemote(String path) {

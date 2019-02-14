@@ -46,4 +46,5 @@ dependencies {
     add('annotationProcessor', deps.butterknifeProcessor, {})
     add('annotationProcessor', deps.arouterCompiler, {})
     add('annotationProcessor', deps.lifecycle_compiler, {})
+    add('annotationProcessor', deps.mantis_compiler, {})
 }

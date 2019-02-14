@@ -111,12 +111,12 @@ ext.deps = [
         mmkv                   : 'com.tencent:mmkv:1.0.10',
 
         /************************************** 自定义 ***********************************/
-        common                 : 'com.zfy:common:0.0.9',
+        common                 : 'com.zfy:common:0.1.0',
         assistant              : 'com.zfy:assistant:0.0.1',
         lightadapter           : 'com.zfy:lightadapter:0.0.3',
-        mantisCompiler         : 'com.zfy:mantis-compiler:0.0.2',
-        mantisAnnotation       : 'com.zfy:mantis-annotation:0.0.1',
-        mantisLibrary          : 'com.zfy:mantis-library:0.0.1',
+        mantis_compiler         : 'com.zfy:mantis-compiler:0.0.3',
+        mantisAnnotation       : 'com.zfy:mantis-annotation:0.0.2',
+        mantisApi              : 'com.zfy:mantis-api:0.0.2',
         // 滑动选中
         slidingSelect          : 'com.march.slidingselect:slidingselect:0.0.1',
 

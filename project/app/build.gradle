@@ -4,18 +4,18 @@ ext.params = [
 ]
 apply from: '../scripts/app.gradle'
 
-// 以下根据需要配置
+// 以下还和正常的配置一样，根据需要来配置
+// 如果没有特殊的配置，下面可以全部不写
 android {
 
     defaultConfig {
-        applicationId "applicationId"
         ndk {
             abiFilters 'armeabi'
         }
         manifestPlaceholders = [qq_id: "1106810205"]
     }
 
-    //正式签名相关信息
+    // 如果有签名的话
     signingConfigs {
         sign {
             storeFile file(keyPath)
@@ -27,6 +27,7 @@ android {
         }
     }
 
+    // 如果有 build type
     buildTypes {
         release {
             signingConfig signingConfigs.sign
@@ -39,12 +40,9 @@ android {
             buildConfigField "int", "Environment", "3" // 环境变量，1开发，2测试，3正式
         }
     }
-
-    dexOptions {
-        javaMaxHeapSize "4g"
-    }
 }
 
+// 如果有额外依赖
 dependencies {
     implementation libs.cardView_v7
 }
