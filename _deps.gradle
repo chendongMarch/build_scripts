@@ -70,18 +70,20 @@ ext.deps = [
 
         /********************************** 网络与数据解析 *******************************/
         // gson解析
-        gson                   : 'com.google.code.gson:gson:2.8.2',
-        fastjson               : 'com.alibaba:fastjson:1.2.9',
+        gson               : 'com.google.code.gson:gson:2.8.2',
+        fastjson           : 'com.alibaba:fastjson:1.2.9',
         // network
-        okhttp3                : 'com.squareup.okhttp3:okhttp:3.10.0',
-        retrofit               : 'com.squareup.retrofit2:retrofit:2.4.0',
-        converter_gson         : 'com.squareup.retrofit2:converter-gson:2.4.0',
-        adapter_rxjava2        : 'com.squareup.retrofit2:adapter-rxjava2:2.4.0',
-        logging_interceptor    : 'com.squareup.okhttp3:logging-interceptor:3.8.0',
+        okhttp3            : 'com.squareup.okhttp3:okhttp:3.12.1',
+        okhttp3_mock       : 'com.squareup.okhttp3:mockwebserver:3.12.1',
+        okhttp3_logger: 'com.squareup.okhttp3:logging-interceptor:3.12.1',
+        retrofit           : 'com.squareup.retrofit2:retrofit:2.4.0',
+        converter_gson     : 'com.squareup.retrofit2:converter-gson:2.4.0',
+        adapter_rxjava2    : 'com.squareup.retrofit2:adapter-rxjava2:2.4.0',
         // 调试工具类库
-        stetho                 : 'com.facebook.stetho:stetho:1.5.0',
-        stetho_okhttp3         : 'com.facebook.stetho:stetho-okhttp3:1.5.0',
-        cookie                 : 'com.github.franmontiel:PersistentCookieJar:v1.0.1',
+        stetho             : 'com.facebook.stetho:stetho:1.5.0',
+        stetho_okhttp3     : 'com.facebook.stetho:stetho-okhttp3:1.5.0',
+        cookie             : 'com.github.franmontiel:PersistentCookieJar:v1.0.1',
+
 
         /********************************** 响应式 ***************************************/
         // rx base
@@ -111,9 +113,9 @@ ext.deps = [
         mmkv                   : 'com.tencent:mmkv:1.0.10',
 
         /************************************** 自定义 ***********************************/
-        common                 : 'com.zfy:common:0.1.0',
+        common                 : 'com.zfy:common:0.1.1',
         assistant              : 'com.zfy:assistant:0.0.1',
-        lightadapter           : 'com.zfy:lightadapter:0.0.3',
+        lightadapter           : 'com.zfy:lightadapter:0.0.5',
         mantis_compiler         : 'com.zfy:mantis-compiler:0.0.3',
         mantisAnnotation       : 'com.zfy:mantis-annotation:0.0.2',
         mantisApi              : 'com.zfy:mantis-api:0.0.2',
@@ -143,3 +145,6 @@ ext.deps = [
         rxdownload             : 'zlc.season:rxdownload:1.1.1'
 
 ]
+//
+//ext.deps.lightadapter = project(':lightadapter')
+//ext.deps.common = project(':common')

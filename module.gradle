@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
-//apply plugin: 'kotlin-android'
-//apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion versions.compileSdkVersion
@@ -42,9 +42,8 @@ android {
 }
 
 dependencies {
-//    add('api', deps.kotlin, {})
-    add('annotationProcessor', deps.butterknifeProcessor, {})
-    add('annotationProcessor', deps.arouterCompiler, {})
-    add('annotationProcessor', deps.lifecycle_compiler, {})
-    add('annotationProcessor', deps.mantis_compiler, {})
+//    add('annotationProcessor', deps.butterknifeProcessor, {})
+//    add('annotationProcessor', deps.arouterCompiler, {})
+//    add('annotationProcessor', deps.lifecycle_compiler, {})
+//    add('annotationProcessor', deps.mantis_compiler, {})
 }

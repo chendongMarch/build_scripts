@@ -1,13 +1,13 @@
 import groovy.json.JsonSlurper
 
 // 组件化切换
-
-task component {
+task component << {
     String sign = "// generate by _component.gradle, do not modify!\n"
     File pkgJsonFile = new File(".component.json")
     if (!pkgJsonFile.exists()) {
         pkgJsonFile.createNewFile()
         pkgJsonFile.write("""
+// 组件化配置文件，修改下面的内容，运行 gradlew component 重新构建
 {
   "entry": "main",
   "components": [

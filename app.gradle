@@ -1,6 +1,8 @@
+// 为 app module 配置统一依赖
+
 apply plugin: 'com.android.application'
-//apply plugin: 'kotlin-android'
-//apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply from: '../scripts/_utils.gradle'
 apply plugin: 'com.alibaba.arouter'
 
@@ -19,9 +21,11 @@ android {
                 arguments = [AROUTER_MODULE_NAME: project.getName(), AROUTER_GENERATE_DOC: "enable"]
             }
         }
-        if (component) {
+
+        try {
             buildConfigField "String", "ENTRY", "\"${component.entry}\""
-        } else {
+        } catch(e) {
+            e.printStackTrace()
             buildConfigField "String", "ENTRY", "\"\""
         }
     }
@@ -105,7 +109,6 @@ tasks.whenTaskAdded { task ->
 
 // add dependencies for app
 dependencies {
-//    add('api', deps.kotlin, {})
     add('annotationProcessor', deps.butterknifeProcessor, {})
     add('annotationProcessor', deps.arouterCompiler, {})
     add('annotationProcessor', deps.lifecycle_compiler, {})

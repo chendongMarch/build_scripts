@@ -1,5 +1,5 @@
 apply from: '../scripts/module.gradle'
 
 dependencies {
-    implementation libs.appcompat_v7
+    implementation deps.appcompat_v7
 }

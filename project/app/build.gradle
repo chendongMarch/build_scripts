@@ -44,5 +44,5 @@ android {
 
 // 如果有额外依赖
 dependencies {
-    implementation libs.cardView_v7
+    implementation deps.cardView_v7
 }
