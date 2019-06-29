@@ -3,6 +3,8 @@ import groovy.json.JsonSlurper
 // 组件化切换
 task component << {
     String sign = "// generate by _component.gradle, do not modify!\n"
+
+    // check .component.json exist
     File pkgJsonFile = new File(".component.json")
     if (!pkgJsonFile.exists()) {
         pkgJsonFile.createNewFile()
@@ -14,12 +16,17 @@ task component << {
     {
       "name": "main",
       "compile": true,
-      "path": "component_main"
+      "remote: false,
+      "remotePath": "",
+      "path": "component_main",
+      "entry": "",
     }
   ]
 }""", "utf-8")
         throw new RuntimeException("please update .component.json first")
     }
+
+    // read component config
     def pkgConfig = new JsonSlurper().parseText(pkgJsonFile.text)
 
     // 配置 setting.gradle
@@ -27,6 +34,7 @@ task component << {
     if (!settingGradleFile.text.contains(sign)) {
         settingGradleFile.append("${sign}apply from: '.component_setting.gradle'")
     }
+
     // 打印消息
     String logContent = ""
     // 组件化配置文件，配置组件入口等
@@ -37,25 +45,32 @@ task component << {
     // 组件化 settings 文件，动态添加编译
     File settingFile = touchFile(".component_setting.gradle")
     String settingContent = ""
+    String entry = ""
     for (component in pkgConfig.components) {
-        if (component.compile && !isRemote(component.path)) {
-            settingContent += "include(':${component.path}')\n"
-            depsContent += "  runtimeOnly project(':${component.path}')\n"
+        if (pkgConfig.entryComponent == component.name) {
+            entry = component.entry
+        }
+        if (component.compile) {
+            if (component.remote) {
+                depsContent += "  runtimeOnly '${component.remotePath}'\n"
+            } else {
+                settingContent += "include(':${component.path}')\n"
+                depsContent += "  runtimeOnly project(':${component.path}')\n"
+            }
         }
         logContent += "组件 => ${component.name} | ${component.compile ? '' : '不'}参与编译 | 路径 => ${component.path}\n"
     }
-    println("""
+
+    log("""
 配置文件详情如下：
-入口组件：${pkgConfig.entry}
+入口组件：${entry}
 ${logContent}
 """)
-    settingFile.write("${sign}${settingContent}", "utf-8")
-    configFile.write("""${sign}ext.component = [ entry: '${pkgConfig.entry}' ]""", "utf-8")
-    depsFile.write("""${sign}dependencies {${depsContent}}""", "utf-8")
-}
 
-static boolean isRemote(String path) {
-    return path.contains(":")
+    // 文件写入
+    settingFile.write("${sign}${settingContent}", "utf-8")
+    configFile.write("""${sign}ext.component = [ entry: '${entry}' ]""", "utf-8")
+    depsFile.write("""${sign}dependencies {${depsContent}}""", "utf-8")
 }
 
 static File touchFile(String name) {
@@ -64,4 +79,8 @@ static File touchFile(String name) {
         file.createNewFile()
     }
     return file
+}
+
+static def log(msg) {
+    println(msg)
 }
